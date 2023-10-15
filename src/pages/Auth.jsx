@@ -38,6 +38,7 @@ const Auth = () => {
 
       <div  className="w-24px text-black bg-white h-10"><GoogleButton
         onClick={signInWithGoogle}
+        className='gb'
       /></div>
     </div>
   )
