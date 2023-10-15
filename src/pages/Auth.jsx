@@ -1,6 +1,6 @@
 
 // import {GoogleButton} from 'react-google-button'
-import { auth,provider } from '../firebase.config';
+import { auth, provider } from '../firebase.config';
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate, Navigate } from "react-router-dom";
 import { useGetUserInfo } from '../hooks/useGetUserInfo';
@@ -36,11 +36,14 @@ const Auth = () => {
         <button className="text-black mt-8" type="submit">Login</button>
       </form> */}
 
-      <div  className="w-24px text-black bg-white h-10"><button
-        onClick={signInWithGoogle}
-        className='text-black text-2xl'
-      >Sign in with google</button></div>
+      <div class="google-btn">
+        <div class="google-icon-wrapper">
+          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" />
+        </div>
+        <p class="btn-text"><b>Sign in with google</b></p>
+      </div>
     </div>
+
   )
 }
 
