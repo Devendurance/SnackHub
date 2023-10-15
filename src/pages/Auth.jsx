@@ -1,5 +1,5 @@
 
-import GoogleButton from 'react-google-button'
+import {GoogleButton} from 'react-google-button'
 import { auth,provider } from '../firebase.config';
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate, Navigate } from "react-router-dom";
