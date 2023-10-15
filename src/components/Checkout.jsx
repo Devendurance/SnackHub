@@ -8,14 +8,16 @@ import { useStateValue } from "../context/StateProvider";
 import { BiPlus,BiMinus } from "react-icons/bi";
 let cartItems = [];
 
-function CartItem({ itemId, name, imgSrc, price }) {
+function Checkout({ itemId, name, imgSrc, price }) {
+
+  console.log("i am", itemId)
+  const carta = JSON.parse(localStorage.getItem("cart"))
   const [qty, setQty] = useState(1);
   const [itemPrice, setItemPrice] = useState(parseInt(qty) * parseFloat(price));
   const [{ cart, total }, dispatch] = useStateValue();
 
   useEffect(() => {
     cartItems = cart;
-    localStorage.setItem("cart", JSON.stringify(cartItems))
     setItemPrice(parseInt(qty) * parseFloat(price));
   }, [qty]);
 
@@ -32,7 +34,7 @@ function CartItem({ itemId, name, imgSrc, price }) {
         });
       } else {
         setQty(qty - 1);
-        console.log(qty);
+        console.log("I am quantitty",qty);
       }
     }
   };
@@ -52,6 +54,8 @@ function CartItem({ itemId, name, imgSrc, price }) {
               onClick={() => {
                 console.log('clicked')
                 updateQty("remove", itemId)
+                // let del = carta.filter(cart => cart.itemId !== itemId)
+                // console.log(del)
               }}
             />
             < BiPlus 
@@ -73,4 +77,4 @@ function CartItem({ itemId, name, imgSrc, price }) {
   );
 }
 
-export default CartItem;
+export default Checkout;

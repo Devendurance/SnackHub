@@ -20,11 +20,15 @@ import { AiFillHome, AiFillMessage } from "react-icons/ai";
 import { MdAccountBalanceWallet, MdFavorite } from "react-icons/md";
 import { CgProfile } from "react-icons/cg";
 import { IoSettingsSharp } from "react-icons/io5";
+import { BsFillCartFill } from "react-icons/bs"
+// import Checkout from "../components/Checkout";
 
 
 const Homepage = () => {
   // const navigate = useNavigate()
   const newUser = JSON.parse(localStorage.getItem('email'))
+  // const carta = JSON.parse(localStorage.getItem("cart"))
+  // console.log(carta)
   const [user, setUser] = useState(null)
   const [isMainData, setMainData] = useState(
     Items.filter((element) => element.itemId == "buger01")
@@ -68,12 +72,14 @@ const Homepage = () => {
     })
     return () => unsubscribe();
 
-  }, [newUser, isMainData, cart,showCart, total, totalPrice]);
+  }, [newUser, isMainData, cart, showCart, total, totalPrice]);
   console.log(newUser)
 
   const setData = (itemId) => {
     setMainData(Items.filter((element) => element.itemId == itemId));
   };
+
+
 
   return (
     <div className="!text-black mt-24">
@@ -84,9 +90,9 @@ const Homepage = () => {
       <div className="leftMenu">
         <ul id="menu">
           {/* prettier-ignore */}
-          <MenuContainer link={'#'} icon={<AiFillHome className="font-bold text-[#373848] text-[26px]" />} isHome />
+          <MenuContainer link={'/home'} icon={<AiFillHome className="font-bold text-[#373848] text-[26px]" />} isHome />
           {/* prettier-ignore */}
-          <MenuContainer link={'#'} icon={<AiFillMessage className="font-bold text-[#373848] text-[26px]" />} />
+          <MenuContainer link={'/cart'} icon={<BsFillCartFill className="font-bold text-[#373848] text-[26px]" />} />
           {/* prettier-ignore */}
           <MenuContainer link={'#'} icon={<MdAccountBalanceWallet className="font-bold text-[#373848] text-[26px]" />} />
           {/* prettier-ignore */}
@@ -100,10 +106,23 @@ const Homepage = () => {
       </div>
       <main>
         <div className="mainContainer">
-        {/* {showCart && <div className="!w-full  !h-[100vh] !bg-red-500">
-          <CartItem/>
 
-</div>} */}
+          {/* Showing Cart Items As a Popup When The Cart Icon Is Clicked  */}
+
+          {/* {cart && <div className="fixed z-40 top-32 right-10 bg-white">
+            {showCart &&
+              carta.map((data) => (
+                <Checkout
+                  key={data.id}
+                  itemId={data.id}
+                  name={data.name}
+                  imgSrc={data.imgSrc}
+                  qty={"4"}
+                  price={data.price}
+                />
+              ))}
+
+          </div>} */}
           {/* Banner  */}
           <div className="banner">
             <BannerName name={newUser.name} discount={"20"} more={"#"} />
@@ -182,13 +201,7 @@ const Homepage = () => {
                     ))}
                 </div>
               </div>
-              <div className="totalSection">
-                <h3>Total</h3>
-                <p>
-                  <span>&#8358; </span> {total}
-                </p>
-              </div>
-              <button className="checkOut">Check Out</button>
+
             </div>
           )}
         </div>

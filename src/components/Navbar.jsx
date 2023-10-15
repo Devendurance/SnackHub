@@ -25,19 +25,30 @@ const Navbar = () => {
   // const provider = new GoogleAuthProvider();
   const [{ cart , showCart}, dispatch] = useStateValue();
 
-
-  const clickCart = () =>{
-    dispatch({
-      type: actionType.SHOW_CART,
-      showCart: !showCart,
-    });
-  }
-
   const location = useLocation()
   const navigate = useNavigate()
   const navbarRef = useRef();
   const searchRef = useRef();
   // const cartRef = useRef();
+
+  const clickCart = () =>{
+    navigate('/cart')
+
+    //Dispatch action of showingCart state 
+    
+    // if (cart !== null){
+    //   dispatch({
+    //     type: actionType.SHOW_CART,
+    //     showCart: !showCart,
+    //   });
+    // }
+    // else{
+    //   dispatch({
+    //     type: actionType.SHOW_CART,
+    //     showCart:  false,
+    //   });
+    // }
+  }
   const navbarHandler = () => {
     navbarRef.current.classList.toggle("active");
     searchRef.current.classList.remove("active");
@@ -130,8 +141,8 @@ const Navbar = () => {
           <BsSearch />
         </div>
 
-        {location.pathname === '/home' &&  <div className="shoppingCart">
-        <BsFillCartFill className="cart" onClick={clickCart} />
+        {location.pathname === '/home' &&  <div onClick={clickCart} className="shoppingCart">
+        <BsFillCartFill className="cart"  />
         <div className={`${!cart ? "noCartItem" : "cart_content"}`}>
           <p>{cart ? cart.length : ""}</p>
         </div>
