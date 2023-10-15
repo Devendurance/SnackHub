@@ -8,7 +8,7 @@ import { BsSearch } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { MdReorder } from "react-icons/md";
 import { useLocation } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Navigate} from "react-router-dom";
 import { auth, provider } from "../firebase.config";
 import { signInWithPopup } from "firebase/auth";
 import { signOut} from "firebase/auth";
@@ -18,13 +18,13 @@ import { signOut} from "firebase/auth";
 import { useStateValue } from "../context/StateProvider";
 import { BsFillStarFill, BsStarHalf, BsFillEyeFill, BsFillCartFill } from "react-icons/bs";
 import { actionType } from "../context/reducer";
-
+import { useGetUserInfo } from "../hooks/useGetUserInfo";
 
 const Navbar = () => {
   // const firebaseAuth = getAuth(app);
   // const provider = new GoogleAuthProvider();
   const [{ cart , showCart}, dispatch] = useStateValue();
-
+  const { isAuth } = useGetUserInfo();
   const location = useLocation()
   const navigate = useNavigate()
   const navbarRef = useRef();
@@ -35,7 +35,7 @@ const Navbar = () => {
     navigate('/cart')
 
     //Dispatch action of showingCart state 
-    
+
     // if (cart !== null){
     //   dispatch({
     //     type: actionType.SHOW_CART,
@@ -62,22 +62,38 @@ const Navbar = () => {
 
   const [value, setValue] = useState("")
 
-  const handleClick = () => {
-    signInWithPopup(auth, provider).then((data) => {
-      console.log(data)
-      setValue(data.user.email);
-      console.log(value)
-      const userData = {
-        email: data.user.email,
-        avatar: data.user.photoURL,
-        name: data.user.displayName,
-      }
-      localStorage.setItem("email", JSON.stringify(userData))
-      if (value) {
-        navigate('/home')
-      }
-    })
-  }
+  // const handleClick = () => {
+  //   signInWithPopup(auth, provider).then((data) => {
+  //     console.log(data)
+  //     setValue(data.user.email);
+  //     console.log(value)
+  //     const userData = {
+  //       email: data.user.email,
+  //       avatar: data.user.photoURL,
+  //       name: data.user.displayName,
+  //       isAuth: true,
+  //     }
+  //     localStorage.setItem("email", JSON.stringify(userData))
+  //     if (value) {
+  //       navigate('/home')
+  //     }
+  //   })
+  // }
+
+  const signInWithGoogle = async () => {
+    const results = await signInWithPopup(auth, provider);
+    const authInfo = {
+      userID: results.user.uid,
+      name: results.user.displayName,
+      email: results.user.email,
+      avatar: results.user.photoURL,
+      isAuth: true,
+    };
+    localStorage.setItem("email", JSON.stringify(authInfo));
+    navigate("/home");
+  };
+
+  //To get user logged in from local storage into javasript object
   const [user, setUser] = useState(null)
 
   useEffect(() => {
@@ -86,20 +102,26 @@ const Navbar = () => {
     const ref = localStorage.getItem("email")
     if (ref) {
       setUser(JSON.parse(ref))
-      console.log('I am user', user)
+      console.log(user)
+      // navigate("/home")
     }
   }, [])
 
-  const logoutHandler = () => {
-    localStorage.clear()
-    signOut(auth).then(() => {
-      console.log('user signed out')
-    })
-      .catch(err => {
-        console.log(err.message)
-      })
-    navigate('/')
+  const signUserOut = async () => {
+    try {
+      await signOut(auth);
+      localStorage.clear();
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  if (isAuth) {
+    return <Navigate to="/home" />;
   }
+
+
 
   return (
     <header className="header">
@@ -128,7 +150,7 @@ const Navbar = () => {
       >
         {user && <div className="flex items center justify-center">
           <img className="rounded-full mt-20 w-1/2" src={user.avatar} alt="avatar" />
-          <div onClick={logoutHandler} className="text-[#f8901c] flex justify-center items-center cursor-pointer text-xl font-bold w-1/2"><p>logout</p></div>
+          <div onClick={signUserOut} className="text-[#f8901c] flex justify-center items-center cursor-pointer text-xl font-bold w-1/2"><p>logout</p></div>
           </div>}
       </nav>}
 
@@ -154,7 +176,7 @@ const Navbar = () => {
         // onClick={cartHandler}
         >
           <CgProfile
-            onClick={handleClick}
+            onClick={signInWithGoogle}
           />
         </div>}
 

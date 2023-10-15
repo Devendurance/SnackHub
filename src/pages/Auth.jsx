@@ -1,35 +1,30 @@
-import { useState } from "react"
-import { createUserWithEmailAndPassword } from "firebase/auth"
-import { setDoc, doc, serverTimestamp } from 'firebase/firestore'
-import { db } from "../firebase.config"
-import { auth } from "../firebase.config"
+
 import GoogleButton from 'react-google-button'
+import { auth,provider } from '../firebase.config';
+import { signInWithPopup } from "firebase/auth";
+import { useNavigate, Navigate } from "react-router-dom";
+import { useGetUserInfo } from '../hooks/useGetUserInfo';
 
 const Auth = () => {
-  // const googleHandler = () => {
-  //   console.log('ishi')
-  // }
+  const navigate = useNavigate();
+  const { isAuth } = useGetUserInfo();
 
+  const signInWithGoogle = async () => {
+    const results = await signInWithPopup(auth, provider);
+    const authInfo = {
+      userID: results.user.uid,
+      email: results.user.email,
+      name: results.user.displayName,
+      avatar: results.user.photoURL,
+      isAuth: true,
+    };
+    localStorage.setItem("email", JSON.stringify(authInfo));
+    navigate("/home");
+  };
 
-  // const handleSubmit = async (e) =>{
-  //   try{
-  //     e.preventDefault()
-  //     const cred = await createUserWithEmailAndPassword(auth, email, password)
-  //     console.log(cred)
-  //     const userRef = doc(db, 'users', cred.user.uid)
-  //     await setDoc(userRef, {
-  //       email: email,
-  //       password: password,
-  //       createdAt: serverTimestamp(),
-  //     })
-  //   }
-  //   catch (error){
-  //     console.error('Error signing up: ',  error)
-  //   }
-  // }
-
-  // const [email, setEmail] = useState('')
-  // const [password, setPassword] = useState('')
+  if (isAuth) {
+    return <Navigate to="/home" />;
+  }
 
 
 
@@ -42,7 +37,7 @@ const Auth = () => {
       </form> */}
 
       <div  className="w-24px text-black bg-white h-10"><GoogleButton
-        onClick={() => { console.log('Google button clicked') }}
+        onClick={signInWithGoogle}
       /></div>
     </div>
   )
