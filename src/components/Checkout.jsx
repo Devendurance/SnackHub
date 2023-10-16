@@ -1,80 +1,48 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable react/prop-types */
-// import { AddRounded, RemoveRounded } from "@mui/icons-material";
-import { BsChevronRight } from "react-icons/bs";
-import { useEffect, useState } from "react";
-import { actionType } from "../context/reducer";
+import Cart from "../pages/Cart"
 import { useStateValue } from "../context/StateProvider";
-import { BiPlus,BiMinus } from "react-icons/bi";
-let cartItems = [];
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-function Checkout({ itemId, name, imgSrc, price }) {
-
-  console.log("i am", itemId)
-  const carta = JSON.parse(localStorage.getItem("cart"))
-  const [qty, setQty] = useState(1);
-  const [itemPrice, setItemPrice] = useState(parseInt(qty) * parseFloat(price));
-  const [{ cart, total }, dispatch] = useStateValue();
-
-  useEffect(() => {
-    cartItems = cart;
-    setItemPrice(parseInt(qty) * parseFloat(price));
-  }, [qty]);
-
-  const updateQty = (action, id) => {
-    if (action == "add") {
-      setQty(qty + 1);
-    } else {
-      // initial state value is one so you need to check if 1 then remove it
-      if (qty == 1) {
-        cartItems.pop(id);
-        dispatch({
-          type: actionType.SET_CART,
-          cart: cartItems,
-        });
-      } else {
-        setQty(qty - 1);
-        console.log("I am quantitty",qty);
-      }
-    }
-  };
-
+const Checkout = () => {
+  const [{ cart, total, showCart }, dispatch] = useStateValue();
+  const navigate= useNavigate()
+  let price;
+  let sumWithInitial;
+  const initialValue = 0;
+  if (cart) {
+    price = cart.map(data => data.price)
+    var arrayOfNumbers = price.map(Number);
+    console.log("prices: ", arrayOfNumbers)
+    sumWithInitial = arrayOfNumbers.reduce((accumulator, currentValue) => accumulator + currentValue, initialValue);
+    console.log(sumWithInitial);
+  }
   return (
-    <div className="cartItem" id={itemId}>
-      <div className="imgBox">
-        <img src={imgSrc} alt="" />
-      </div>
-      <div className="itemSection">
-        <h2 className="itemName font-bold">{name}</h2>
-        <div className="itemQuantity">
-          <span>x {qty}</span>
-          <div className="quantity">
-            <BiMinus
-              className="itemRemove"
-              onClick={() => {
-                console.log('clicked')
-                updateQty("remove", itemId)
-                // let del = carta.filter(cart => cart.itemId !== itemId)
-                // console.log(del)
-              }}
-            />
-            < BiPlus 
-              className="itemAdd"
-              onClick={() => updateQty("add", itemId)}
-            />
-          </div>
-        </div>
-      </div>
-      <p className="itemPrice">
-        <span className="dolorSign">&#8358;</span>{" "}
-        <span className="itemPriceValue">{itemPrice}</span>
-      </p>
+    <div className="h-screen w-1/2 mx-auto p-7">
+      <p onClick={()=>navigate('/home')} className="text-3xl font-semibold hover:text-orange-500 cursor-pointer">Go back to homepage</p>
+      {cart ?
+        cart.map((data) => (
+          <Cart
+            key={data.id}
+            itemId={data.id}
+            name={data.name}
+            imgSrc={data.imgSrc}
+            qty={"4"}
+            price={data.price}
+          />
+        )) : <div className="!text-black !font-bold !text-4xl"> ADD ITEM TO CART First</div>}
+      {cart && <div className="totalSection">
+        <h3>Total</h3>
+        <p>
+          <span>&#8358; </span> {sumWithInitial}
+        </p>
+      </div>}
+      {cart && <Link to="https://paystack.com/pay/snackhub">
+        <button className="checkOut">Check Out</button>
 
-      
-
-      
+      </Link>}
     </div>
-  );
+  )
 }
 
-export default Checkout;
+export default Checkout
+

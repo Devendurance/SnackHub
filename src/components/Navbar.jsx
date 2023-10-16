@@ -32,7 +32,7 @@ const Navbar = () => {
   // const cartRef = useRef();
 
   const clickCart = () =>{
-    navigate('/cart')
+    navigate('/checkout')
 
     //Dispatch action of showingCart state 
 

@@ -92,7 +92,7 @@ const Homepage = () => {
           {/* prettier-ignore */}
           <MenuContainer link={'/home'} icon={<AiFillHome className="font-bold text-[#373848] text-[26px]" />} isHome />
           {/* prettier-ignore */}
-          <MenuContainer link={'/cart'} icon={<BsFillCartFill className="font-bold text-[#373848] text-[26px]" />} />
+          <MenuContainer link={'/checkout'} icon={<BsFillCartFill className="font-bold text-[#373848] text-[26px]" />} />
           {/* prettier-ignore */}
           <MenuContainer link={'#'} icon={<MdAccountBalanceWallet className="font-bold text-[#373848] text-[26px]" />} />
           {/* prettier-ignore */}

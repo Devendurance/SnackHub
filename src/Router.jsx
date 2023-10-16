@@ -5,7 +5,7 @@ import Navbar from "./components/Navbar"
 import Footer from "./components/Footer"
 import { useLocation } from 'react-router-dom';
 import Homepage from './pages/Homepage';
-import Cart from './pages/Cart';
+import Checkout from './components/Checkout';
 
 const RouterConfig = () => {
   const location= useLocation()
@@ -17,7 +17,7 @@ const RouterConfig = () => {
         <Route exact path='/' element={<Landing/>} />
         <Route exact path='/auth' element={<Auth/>} />
         <Route exact path='/home' element={<Homepage/>} />
-        <Route exact path='/cart' element={<Cart/>} />
+        <Route exact path='/checkout' element={<Checkout/>} />
       </Routes>
       {location.pathname === '/' && <Footer />}
     </div>
